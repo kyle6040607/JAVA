@@ -300,12 +300,5 @@ class MyJFrameIdentity  extends JFrame{
 public class Main{
     public static void main(String[] args){
         MyJFrameIdentity Identity = new MyJFrameIdentity();
-        /*try {
-            Thread.sleep(6000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }*/
-
-        System.out.println(Identity.Identity);
     }
 }
