@@ -1,0 +1,311 @@
+package com.company;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+class MyJFrame extends JFrame{
+    JPanel contentPane;
+    JLabel txtFood,txtDrink,txtAmount;
+    JButton btnConfirm,btnNo;
+    double amount = 0;
+    MyJFrame(double discount,String foodName,int foodMoney,String drinkName,int drinkMoney){
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setBounds(500,250,330,180);
+        setTitle("點餐列表");
+        contentPane = new JPanel();
+        setContentPane(contentPane);
+        contentPane.setLayout(null);
+
+        txtFood = new JLabel(foodName + ":" + foodMoney + "元");
+        txtFood.setBounds(50,10,100,15);
+        contentPane.add(txtFood);
+
+        txtDrink = new JLabel(drinkName + ":" + drinkMoney + "元");
+        txtDrink.setBounds(50,40,100,15);
+        contentPane.add(txtDrink);
+
+        amount = (foodMoney + drinkMoney) * discount;
+        txtAmount = new JLabel("總共:" + (int)amount + "元");
+        txtAmount.setBounds(50,70,100,15);
+        contentPane.add(txtAmount);
+
+        btnConfirm = new JButton("是");
+        btnConfirm.setBounds(50,100,80,25);
+        contentPane.add(btnConfirm);
+        btnConfirm.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int isok = JOptionPane.showConfirmDialog(null,"您點的餐點是" + foodName + "和" + drinkName + "嗎?","餐點確認",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+                if(isok == 1)
+                    JOptionPane.showMessageDialog(null, "請重新點餐", "點餐錯誤", JOptionPane.WARNING_MESSAGE);
+                else if(isok == 0)
+                    JOptionPane.showMessageDialog(null, "請盡速至櫃台結帳", "點餐完畢", JOptionPane.PLAIN_MESSAGE);
+
+                setVisible(false);
+            }
+        });
+
+        btnNo = new JButton("否");
+        btnNo.setBounds(130,100,80,25);
+        contentPane.add(btnNo);
+        btnNo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "請重新點餐", "點餐錯誤", JOptionPane.WARNING_MESSAGE);
+                setVisible(false);
+            }
+        });
+        setVisible(true);
+    }
+}
+
+class MyJFrameDrink extends JFrame {
+    JPanel contentPane;
+    String[] imgName = new String[]{"米漿","豆漿"};
+    int[] imgNameMoney = new int[]{20,20};
+    JButton btnPrev,btnNext,btnOrder;
+    JLabel lblName,lblImg,lblshow;
+    int n = 0;
+    MyJFrameDrink(double discount,String foodName,int foodMoney){
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setBounds(500,150,335,350);
+        setTitle("餐點系統:飲料列表");
+        contentPane = new JPanel();
+        setContentPane(contentPane);
+        contentPane.setLayout(null);
+
+        lblImg = new JLabel(imgName[n]);
+        lblImg.setIcon(new ImageIcon(imgName[n] + ".jpg"));
+        lblImg.setBounds(20,0,280,235);
+        contentPane.add(lblImg);
+
+        lblName = new JLabel(imgName[n] + ": " + imgNameMoney[n] + "元");
+        lblName.setBounds(20,220,180,25);
+        contentPane.add(lblName);
+
+        String show = "第" + (n + 1) + "種,共" + imgName.length + "種";
+        lblshow = new JLabel(show);
+        lblshow.setBounds(20,250,180,25);
+        contentPane.add(lblshow);
+
+        btnPrev = new JButton("上一種");
+        btnPrev.setBounds(20,280,80,25);
+        contentPane.add(btnPrev);
+        btnPrev.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                n--;
+                if(n<0)
+                    n = imgName.length-1;
+                lblImg.setIcon(new ImageIcon(imgName[n] + ".jpg"));
+                lblName.setText(imgName[n]+ ": " + imgNameMoney[n] + "元");
+                lblshow.setText("第" + (n + 1) + "種,共" + imgName.length + "種");
+            }
+        });
+
+        btnOrder = new JButton("點餐");
+        btnOrder.setBounds(120,280,80,25);
+        contentPane.add(btnOrder);
+        btnOrder.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int isok = JOptionPane.showConfirmDialog(null,"您點的餐點是" + imgName[n] + "嗎?","餐點確認",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+                if(isok == 1)
+                    return;
+                else if(isok == 0){
+                    setVisible(false);
+                    MyJFrame JF = new MyJFrame(discount,foodName,foodMoney,imgName[n],imgNameMoney[n]);
+                }
+            }
+        });
+
+        btnNext = new JButton("下一種");
+        btnNext.setBounds(220,280,80,25);
+        contentPane.add(btnNext);
+        btnNext.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                n++;
+                if(n >= imgName.length)
+                    n = 0;
+                lblImg.setIcon(new ImageIcon(imgName[n] + ".jpg"));
+                lblName.setText(imgName[n]+ ": " + imgNameMoney[n] + "元");
+                lblshow.setText("第" + (n + 1) + "種,共" + imgName.length + "種");
+            }
+        });
+
+        setVisible(true);
+    }
+}
+
+class MyJFrameEat extends JFrame{
+    JPanel contentPane;
+    String[] imgName = new String[]{"小籠包","抓餅","油條","燒餅","肉包"};
+    int[] imgNameMoney = new int[]{65,30,15,15,20};
+    JButton btnPrev,btnNext,btnOrder;
+    JLabel lblName,lblImg,lblshow;
+    int n = 0;
+    MyJFrameEat(double discount){
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setBounds(500,150,335,350);
+        setTitle("餐點系統:主食列表");
+        contentPane = new JPanel();
+        setContentPane(contentPane);
+        contentPane.setLayout(null);
+
+        lblImg = new JLabel(imgName[n]);
+        lblImg.setIcon(new ImageIcon(imgName[n] + ".jpg"));
+        lblImg.setBounds(20,0,280,235);
+        contentPane.add(lblImg);
+
+        lblName = new JLabel(imgName[n] + ": " + imgNameMoney[n] + "元");
+        lblName.setBounds(20,220,180,25);
+        contentPane.add(lblName);
+
+        String show = "第" + (n + 1) + "種,共" + imgName.length + "種";
+        lblshow = new JLabel(show);
+        lblshow.setBounds(20,250,180,25);
+        contentPane.add(lblshow);
+
+        btnPrev = new JButton("上一種");
+        btnPrev.setBounds(20,280,80,25);
+        contentPane.add(btnPrev);
+        btnPrev.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                n--;
+                if(n<0)
+                    n = imgName.length-1;
+                lblImg.setIcon(new ImageIcon(imgName[n] + ".jpg"));
+                lblName.setText(imgName[n]+ ": " + imgNameMoney[n] + "元");
+                lblshow.setText("第" + (n + 1) + "種,共" + imgName.length + "種");
+            }
+        });
+
+        btnOrder = new JButton("點餐");
+        btnOrder.setBounds(120,280,80,25);
+        contentPane.add(btnOrder);
+        btnOrder.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int isok = JOptionPane.showConfirmDialog(null,"您點的餐點是" + imgName[n] + "嗎?","餐點確認",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+                if(isok == 1)
+                    return;
+                else if(isok == 0){
+                    setVisible(false);
+                    MyJFrameDrink drink = new MyJFrameDrink(discount,imgName[n],imgNameMoney[n]);
+                }
+            }
+        });
+
+        btnNext = new JButton("下一種");
+        btnNext.setBounds(220,280,80,25);
+        contentPane.add(btnNext);
+        btnNext.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                n++;
+                if(n >= imgName.length)
+                    n = 0;
+                lblImg.setIcon(new ImageIcon(imgName[n] + ".jpg"));
+                lblName.setText(imgName[n]+ ": " + imgNameMoney[n] + "元");
+                lblshow.setText("第" + (n + 1) + "種,共" + imgName.length + "種");
+            }
+        });
+
+        setVisible(true);
+    }
+}
+
+class MyJFrameIdentity  extends JFrame{
+    JPanel contentPane;
+    JTextField txtId,txtPwd;
+    JLabel lblId,lblPwd,lblNews;
+    JButton btnLogin,btnNotStudent;
+    boolean Identity = true;
+    MyJFrameIdentity(){
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setBounds(500,250,330,180);
+        setTitle("文化點餐系統學生認證");
+        contentPane = new JPanel();
+        setContentPane(contentPane);
+        contentPane.setLayout(null);
+
+        txtId = new JTextField();
+        txtId.setToolTipText("請輸入學號");
+        txtId.setColumns(10);
+        txtId.setBounds(90,20,160,25);
+        contentPane.add(txtId);
+
+        txtPwd = new JTextField();
+        txtPwd.setToolTipText("請輸入密碼");
+        txtPwd.setColumns(10);
+        txtPwd.setBounds(90,60,160,25);
+        contentPane.add(txtPwd);
+
+        lblId = new JLabel("學號：");
+        lblId.setBounds(50,23,100,15);
+        contentPane.add(lblId);
+
+        lblPwd = new JLabel("密碼：");
+        lblPwd.setBounds(50,63,100,15);
+        contentPane.add(lblPwd);
+
+        lblNews = new JLabel("文化學生點餐一律九折");
+        lblNews.setBounds(110,0,200,20);
+        contentPane.add(lblNews);
+
+        btnLogin = new JButton("登入");
+        btnLogin.setBounds(90,100,60,25);
+        contentPane.add(btnLogin);
+        btnLogin.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(txtId.getText().equals("A8250351") && txtPwd.getText().equals("123")){
+                    int isok = JOptionPane.showConfirmDialog(null,"認證通過請問是否點餐?","身分認證",JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE);
+                    if(isok == 1){
+                        setVisible(false);
+                    }
+                    else if(isok == 0){
+                        setVisible(false);
+                        MyJFrameEat eat = new MyJFrameEat(0.8);
+                    }
+                }
+                else
+                    JOptionPane.showMessageDialog(null,"認證錯誤請再輸入一次","身分認證",JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        btnNotStudent = new JButton("非文化學生");
+        btnNotStudent.setBounds(150,100,100,25);
+        contentPane.add(btnNotStudent);
+        btnNotStudent.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int ok = JOptionPane.showConfirmDialog(null,"非文化學生請問是否點餐?","身分認證",JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE);
+                if(ok == 1){
+                    setVisible(false);
+                }
+                else if(ok == 0){
+                    setVisible(false);
+                    MyJFrameEat eat = new MyJFrameEat(1);
+                }
+            }
+        });
+
+        setVisible(true);
+    }
+}
+
+public class Main{
+    public static void main(String[] args){
+        MyJFrameIdentity Identity = new MyJFrameIdentity();
+        /*try {
+            Thread.sleep(6000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
+
+        System.out.println(Identity.Identity);
+    }
+}
